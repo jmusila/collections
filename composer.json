@@ -1,5 +1,10 @@
 {
     "require": {
-        "tightenco/collect": "^8.34"
+        "illuminate/support": "^8.61"
+    },
+    "autoload": {
+        "psr-4": {
+            "src\\": "src"
+        }
     }
 }

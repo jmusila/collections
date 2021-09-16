@@ -4,8 +4,6 @@ namespace src;
 
 require './../vendor/autoload.php';
 
-use Illuminate\Support\Collection;
-
 class Product
 {
     public function getTotalPriceForLampAndWalletProducts()
