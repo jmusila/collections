@@ -14,8 +14,10 @@ class Product
 
         $products = json_decode($products);
 
+        // Flatten the collection
         $products = collect($products)->flatten();
 
+        // Filter to get only Lamp & Wallet Products and Map the prices and sum them
         return $products->filter(function ($product) {
             return collect(['Lamp', 'Wallet'])->contains($product->product_type);
         })->map(function($product){
