@@ -1,6 +1,7 @@
 {
     "require": {
-        "illuminate/support": "^8.61"
+        "illuminate/support": "^8.61",
+        "guzzlehttp/guzzle": "^7.3"
     },
     "autoload": {
         "psr-4": {
