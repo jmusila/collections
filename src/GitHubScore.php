@@ -47,6 +47,6 @@ class GitHubScore
     }
 }
 
-$score = GitHubScore::forUser('jmusila');
+$score = GitHubScore::forUser('your_username');
 
 echo $score;
