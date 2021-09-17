@@ -8,31 +8,33 @@ require './../vendor/autoload.php';
 
 class GitHubScore
 {
-    public function getUserGitHubScrore()
+    public function getUserGitHubScrore($username = "yourusername")
     {
-        $url = "https://api.github.com/users/jmusila/events";
+        return self::fetchEvents($username)->pluck('type')->map(function ($eventType) {
+            return self::lookupScore($eventType);
+        })->sum();
+    }
+
+    private static function fetchEvents($username)
+    {
+        $url = "https://api.github.com/users/{$username}/events";
 
         $client = new Client();
 
-        $res = collect((json_decode($client->request('GET', $url)->getBody())));
+        return collect((json_decode($client->request('GET', $url)->getBody())));
+    }
 
-        $events = $res->pluck('type');
-
-        $scrores = $events->map(function ($eventType) {
-            $eventScores = collect([
-                'PushEvent' => 5,
-                'CreateEvent' => 4,
-                'IssuesEvent' => 3,
-                'CommitCommentEvent' => 2,
-            ]);
-
-            return $eventScores->get($eventType, 1);
-        })->sum();
-
-        return $scrores;
+    private static function lookupScore($eventType)
+    {
+        return collect([
+            'PushEvent' => 5,
+            'CreateEvent' => 4,
+            'IssuesEvent' => 3,
+            'CommitCommentEvent' => 2,
+        ])->get($eventType, 1);
     }
 }
 
 $score = new GitHubScore();
 
-var_dump($score->getUserGitHubScrore());
+echo($score->getUserGitHubScrore());
