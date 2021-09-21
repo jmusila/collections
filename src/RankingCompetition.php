@@ -21,5 +21,12 @@ class RankingCompetition
             ['score' => 67, 'team' => 'G'],
             ['score' => 82, 'team' => 'H'],
         ]);
+
+        return $scores->sortByDesc('score');
     }
 }
+
+
+$rank = new RankingCompetition();
+
+var_dump($rank->rankCompetition());
