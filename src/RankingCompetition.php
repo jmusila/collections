@@ -36,7 +36,7 @@ class RankingCompetition
                 'rank' => $lowestRank
             ]);
             });
-        })->collapse();
+        })->collapse()->sortBy('rank');
     }
 }
 
