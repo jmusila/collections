@@ -22,11 +22,11 @@ class RankingCompetition
             ['score' => 82, 'team' => 'H'],
         ]);
 
-        return $this->assignInitialRankings($scores)->groupBy(function ($rankedScore) {
-            return $rankedScore['score'];
-        })->map(function ($tiedScores) {
-            return $this->applyMinRank($tiedScores);
-        })->collapse()->sortBy('rank');
+        $rankedScore = $this->assignInitialRankings($scores);;
+
+        $adjustedScores = $this->adjustRankingsForTies($rankedScore);
+
+        return $adjustedScores->sortBy('rank');
     }
 
     /**
@@ -52,6 +52,13 @@ class RankingCompetition
                 'rank' => $rank
             ]);
         });
+    }
+
+    public function adjustRankingsForTies($scores)
+    {
+        return $scores->groupBy('score')->map(function ($tiedScores) {
+            return $this->applyMinRank($tiedScores);
+        })->collapse();
     }
 }
 
