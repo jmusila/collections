@@ -22,7 +22,7 @@ class RankingCompetition
             ['score' => 82, 'team' => 'H'],
         ]);
 
-        $rankedScore = $this->assignInitialRankings($scores);;
+        $rankedScore = $this->assignInitialRankings($scores);
 
         $adjustedScores = $this->adjustRankingsForTies($rankedScore);
 
@@ -46,19 +46,21 @@ class RankingCompetition
 
     public function assignInitialRankings($scores)
     {
-        return $scores->sortByDesc('score')->zip(range(1, $scores->count()))->map(function ($scoreAndRank) {
-            list($score, $rank) = $scoreAndRank;
-            return array_merge($score, [
-                'rank' => $rank
-            ]);
-        });
+        return $scores->sortByDesc('score')->zip(range(1, $scores->count()))
+            ->map(function ($scoreAndRank) {
+                list($score, $rank) = $scoreAndRank;
+                return array_merge($score, [
+                    'rank' => $rank
+                ]);
+            });
     }
 
     public function adjustRankingsForTies($scores)
     {
-        return $scores->groupBy('score')->map(function ($tiedScores) {
-            return $this->applyMinRank($tiedScores);
-        })->collapse();
+        return $scores->groupBy('score')
+            ->map(function ($tiedScores) {
+                return $this->applyMinRank($tiedScores);
+            })->collapse();
     }
 }
 
