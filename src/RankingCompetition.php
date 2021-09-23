@@ -30,13 +30,23 @@ class RankingCompetition
         })->groupBy(function ($rankedScore) {
             return $rankedScore['score'];
         })->map(function ($tiedScores) {
-            $lowestRank = $tiedScores->pluck('rank')->min();
-            return $tiedScores->map(function ($rankedScore) use ($lowestRank) {
-                return array_merge($rankedScore, [
+            return $this->applyMinRank($tiedScores);
+        })->collapse()->sortBy('rank');
+    }
+
+    /**
+     * Apply min rank
+     *
+     */
+    public function applyMinRank($tiedScores)
+    {
+        $lowestRank = $tiedScores->pluck('rank')->min();
+
+        return $tiedScores->map(function ($rankedScore) use ($lowestRank) {
+            return array_merge($rankedScore, [
                 'rank' => $lowestRank
             ]);
-            });
-        })->collapse()->sortBy('rank');
+        });
     }
 }
 
