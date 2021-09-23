@@ -22,11 +22,18 @@ class RankingCompetition
             ['score' => 82, 'team' => 'H'],
         ]);
 
-        $rankedScore = $this->assignInitialRankings($scores);
+        // $rankedScore = $this->assignInitialRankings($scores);
 
-        $adjustedScores = $this->adjustRankingsForTies($rankedScore);
+        // $adjustedScores = $this->adjustRankingsForTies($rankedScore);
 
-        return $adjustedScores->sortBy('rank');
+        // return $adjustedScores->sortBy('rank');
+
+        return $scores->pipe(function($scores){
+            return $this->assignInitialRankings($scores);
+        })->pipe(function($rankedScores){
+            return $this->adjustRankingsForTies($rankedScores);
+        })->sortBy('rank');
+
     }
 
     /**
