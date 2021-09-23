@@ -22,12 +22,7 @@ class RankingCompetition
             ['score' => 82, 'team' => 'H'],
         ]);
 
-        return $scores->sortByDesc('score')->zip(range(1, $scores->count()))->map(function ($scoreAndRank) {
-            list($score, $rank) = $scoreAndRank;
-            return array_merge($score, [
-                'rank' => $rank
-            ]);
-        })->groupBy(function ($rankedScore) {
+        return $this->assignInitialRankings($scores)->groupBy(function ($rankedScore) {
             return $rankedScore['score'];
         })->map(function ($tiedScores) {
             return $this->applyMinRank($tiedScores);
@@ -45,6 +40,16 @@ class RankingCompetition
         return $tiedScores->map(function ($rankedScore) use ($lowestRank) {
             return array_merge($rankedScore, [
                 'rank' => $lowestRank
+            ]);
+        });
+    }
+
+    public function assignInitialRankings($scores)
+    {
+        return $scores->sortByDesc('score')->zip(range(1, $scores->count()))->map(function ($scoreAndRank) {
+            list($score, $rank) = $scoreAndRank;
+            return array_merge($score, [
+                'rank' => $rank
             ]);
         });
     }
